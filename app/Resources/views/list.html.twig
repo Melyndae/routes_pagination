@@ -1,0 +1,67 @@
+{# app/Ressources/views/list.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <h1>TP: Routes - Pagination</h1>
+
+    <h2>Liste des étudiants</h2>
+
+    <p>Page {{ page }} sur {{ pagesTotal }}</p>
+
+    <form action="{{ path('students_list', { 'page': 1 }) }}" method="GET">
+        <label for="limit">Nombre d'étudiants par page :</label>
+        <select name="limit" id="limit">
+            <option value="5" {% if limit is defined and limit == 5 %}selected{% endif %}>5</option>
+            <option value="10" {% if limit is defined and limit == 10 %}selected{% endif %}>10</option>
+            <option value="20" {% if limit is defined and limit == 20 %}selected{% endif %}>20</option>
+        </select>
+        <input type="submit" value="OK">
+    </form>
+
+    <br>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Birthdate</th>
+            <th>Sex</th>
+        </tr>
+        {% for student in students %}
+            <tr>
+                <td>{{ student.id }}</td>
+                <td>{{ student.firstname }}</td>
+                <td>{{ student.lastname }}</td>
+                <td>{{ student.birthdate }}</td>
+                <td>{{ student.sex }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    {% set pagePrevious = page - 1 %}
+    {% set pageNext = page + 1 %}
+
+    {% if pagePrevious > 0 %}
+        <a href="{{ path('students_list', { 'page': pagePrevious, 'limit': limit }) }}">Page précédente</a>
+    {% endif %}
+
+    {% if pagePrevious > 0 and pageNext <= pagesTotal %}
+        &nbsp;-&nbsp;
+    {% endif %}
+
+    {% if pageNext <= pagesTotal %}
+        <a href="{{ path('students_list', { 'page': pageNext, 'limit': limit }) }}">Page suivante</a>
+    {% endif %}
+
+    <br>
+    <br>
+    <br>
+
+    <a href="{{ path('students_index') }}">Retour à l'accueil</a>
+
+{% endblock %}
